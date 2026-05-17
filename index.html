@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BMO — Saúde Mental</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 <style>
 :root {
   --bg: #EAF6F2;
@@ -62,6 +63,9 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
 .nav-item:hover { background: var(--bg); color: var(--text); }
 .nav-item.active { background: var(--teal); color: var(--text); }
 .nav-item .icon { font-size: 18px; }
+.material-icons { font-family: 'Material Icons'; font-weight: normal; font-style: normal; font-size: inherit; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; }
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
 .nav-section { font-size: 11px; font-weight: 700; color: var(--border); text-transform: uppercase; padding: 8px 12px 4px; letter-spacing: 1px; }
 .main-content { flex: 1; padding: 28px; overflow-y: auto; max-width: 100%; }
 .section { display: none; }
@@ -174,7 +178,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
   <div class="auth-wrap">
     <div class="auth-card">
       <div class="auth-header">
-        <div class="bmo-emoji">⌘</div>
+        <div class="bmo-emoji"><span class="material-icons md-48">psychology</span></div>
         <h1>BMO</h1>
         <p>Bem-vindo de volta</p>
       </div>
@@ -200,7 +204,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
   <div class="auth-wrap">
     <div class="auth-card">
       <div class="auth-header">
-        <div class="bmo-emoji">⌘</div>
+        <div class="bmo-emoji"><span class="material-icons md-48">psychology</span></div>
         <h1>BMO</h1>
         <p>Crie sua conta</p>
       </div>
@@ -230,7 +234,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
   <div class="dash-layout">
     <div class="topbar">
       <div class="topbar-left">
-        <button class="btn-menu" onclick="toggleSidebar()">☰</button>
+        <button class="btn-menu" onclick="toggleSidebar()"><span class="material-icons md-24">menu</span></button>
         <span class="topbar-logo">BMO</span>
       </div>
       <div class="topbar-right">
@@ -241,15 +245,15 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
     <div class="dash-body">
       <div class="sidebar" id="sidebar">
         <div class="nav-section">Principal</div>
-        <button class="nav-item active" onclick="showSection('home')"><span class="icon">⌂</span> Início</button>
-        <button class="nav-item" onclick="showSection('chatbot')"><span class="icon">⚙</span> Chatbot IA</button>
-        <button class="nav-item" onclick="showSection('tasks')"><span class="icon">✔</span> Tarefas</button>
-        <button class="nav-item" onclick="showSection('mood')"><span class="icon">☺</span> Humor</button>
+        <button class="nav-item active" onclick="showSection('home')"><span class="material-icons icon">home</span> Início</button>
+        <button class="nav-item" onclick="showSection('chatbot')"><span class="material-icons icon">chat</span> Chatbot IA</button>
+        <button class="nav-item" onclick="showSection('tasks')"><span class="material-icons icon">task_alt</span> Tarefas</button>
+        <button class="nav-item" onclick="showSection('mood')"><span class="material-icons icon">mood</span> Humor</button>
         <div class="nav-section">Mais</div>
-        <button class="nav-item" onclick="showSection('estrelas')"><span class="icon">≈</span> Estrelas Pontilhadas</button>
-        <button class="nav-item" onclick="showSection('respiracao')"><span class="icon">⟲</span> Respiração</button>
-        <button class="nav-item" onclick="showSection('relatorios')"><span class="icon">▣</span> Relatórios</button>
-        <button class="nav-item" onclick="showSection('perfil')"><span class="icon">⊛</span> Perfil</button>
+        <button class="nav-item" onclick="showSection('estrelas')"><span class="material-icons icon">auto_awesome</span> Estrelas Pontilhadas</button>
+        <button class="nav-item" onclick="showSection('respiracao')"><span class="material-icons icon">self_improvement</span> Respiração</button>
+        <button class="nav-item" onclick="showSection('relatorios')"><span class="material-icons icon">analytics</span> Relatórios</button>
+        <button class="nav-item" onclick="showSection('perfil')"><span class="material-icons icon">person</span> Perfil</button>
       </div>
 
       <div class="main-content">
@@ -257,7 +261,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
         <!-- HOME -->
         <div class="section active" id="section-home">
           <div class="welcome-banner">
-            <div class="welcome-emoji">✦</div>
+            <div class="welcome-emoji"><span class="material-icons md-24">emoji_objects</span></div>
             <div class="welcome-text">
               <h2>Olá de volta, <span id="home-username">amigo</span>!</h2>
               <p>Como você está se sentindo hoje?</p>
@@ -296,14 +300,14 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
           <div class="card" style="margin-bottom:16px">
             <div class="card-title">Módulos</div>
             <div class="module-grid">
-              <div class="module-btn" onclick="showSection('chatbot')"><div class="mod-icon">⚙</div><div class="mod-name">Chatbot IA</div></div>
-              <div class="module-btn" onclick="showSection('estrelas')"><div class="mod-icon">≈</div><div class="mod-name">Estrelas Pontilhadas</div></div>
-              <div class="module-btn" onclick="showSection('respiracao')"><div class="mod-icon">⟲</div><div class="mod-name">Respiração</div></div>
-              <div class="module-btn" onclick="showSection('relatorios')"><div class="mod-icon">▣</div><div class="mod-name">Relatórios</div></div>
+              <div class="module-btn" onclick="showSection('chatbot')"><div class="mod-icon material-icons md-24">chat</div><div class="mod-name">Chatbot IA</div></div>
+              <div class="module-btn" onclick="showSection('estrelas')"><div class="mod-icon material-icons md-24">auto_awesome</div><div class="mod-name">Estrelas Pontilhadas</div></div>
+              <div class="module-btn" onclick="showSection('respiracao')"><div class="mod-icon material-icons md-24">self_improvement</div><div class="mod-name">Respiração</div></div>
+              <div class="module-btn" onclick="showSection('relatorios')"><div class="mod-icon material-icons md-24">bar_chart</div><div class="mod-name">Relatórios</div></div>
             </div>
           </div>
           <div class="cvv-banner">
-            <div style="font-size:28px">ℹ</div>
+            <div style="font-size:28px"><span class="material-icons md-24">support_agent</span></div>
             <div class="cvv-text">
               <p>Precisa de ajuda? Centro de Valorização da Vida</p>
               <strong>188</strong>
@@ -322,7 +326,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
               </div>
               <div class="chat-input-row">
                 <input class="chat-input" id="chat-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter') sendChat()">
-                <button class="btn-send" onclick="sendChat()">➤</button>
+                <button class="btn-send" onclick="sendChat()"><span class="material-icons md-18">send</span></button>
               </div>
             </div>
           </div>
@@ -353,11 +357,11 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
             <div class="card">
               <div class="card-title">Como você está agora?</div>
               <div class="mood-row" style="margin-bottom:16px">
-                <button class="mood-btn" onclick="sendMoodFull(1)">1</button>
-                <button class="mood-btn" onclick="sendMoodFull(2)">2</button>
-                <button class="mood-btn" onclick="sendMoodFull(3)">3</button>
-                <button class="mood-btn" onclick="sendMoodFull(4)">4</button>
-                <button class="mood-btn" onclick="sendMoodFull(5)">5</button>
+                <button class="mood-btn" onclick="sendMoodFull(1)" title="Muito ruim">😢</button>
+                <button class="mood-btn" onclick="sendMoodFull(2)" title="Ruim">😕</button>
+                <button class="mood-btn" onclick="sendMoodFull(3)" title="Neutro">😐</button>
+                <button class="mood-btn" onclick="sendMoodFull(4)" title="Bem">🙂</button>
+                <button class="mood-btn" onclick="sendMoodFull(5)" title="Muito bem">😄</button>
               </div>
               <textarea class="estrelas-input" id="mood-note" placeholder="Adicione uma nota (opcional)..." style="min-height:80px"></textarea>
             </div>
@@ -436,7 +440,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
           <div class="page-title">Perfil</div>
           <div class="grid-2">
             <div class="card">
-              <div class="profile-avatar">BMO</div>
+              <div class="profile-avatar"><span class="material-icons md-48">person</span></div>
               <div class="profile-name" id="profile-name">Carregando...</div>
               <div class="profile-email" id="profile-email">...</div>
               <div class="form-group">
@@ -665,7 +669,7 @@ async function loadTasks(filter) {
       '<div class="task-check ' + (t.status === 'DONE' ? 'done' : '') + '" onclick="toggleTask(\'' + t.id + '\',\'' + t.status + '\')">' + (t.status === 'DONE' ? '✓' : '') + '</div>' +
       '<span class="task-text ' + (t.status === 'DONE' ? 'done' : '') + '">' + t.title + '</span>' +
       '<span class="task-status ' + CL[t.status] + '">' + LB[t.status] + '</span>' +
-      '<button class="task-delete" onclick="deleteTask(\'' + t.id + '\')">✕</button>' +
+      '<button class="task-delete" onclick="deleteTask(\'' + t.id + '\')"><span class="material-icons md-18">close</span></button>' +
       '</div>'
     ).join('');
   } catch(e) { list.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
@@ -722,7 +726,7 @@ async function loadMood() {
     ]);
     const hist = await h.json();
     const stats = await s.json();
-    const EM = { 1:'1', 2:'2', 3:'3', 4:'4', 5:'5' };
+    const EM = { 1:'😢', 2:'😕', 3:'😊', 4:'🙂', 5:'😄' };
     if (hist.data && hist.data.length) {
       document.getElementById('mood-history').innerHTML = '<div class="mood-history">' +
         hist.data.map(e => '<div class="mood-hist-item"><div class="emoji">' + EM[e.mood] + '</div><small>' + new Date(e.createdAt).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + '</small></div>').join('') +
@@ -758,7 +762,7 @@ async function loadReports() {
         '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span>Concluídas</span><b>' + (d.done??0) + '</b></div>' +
         '</div>';
     }
-    const EM = { 1:'1', 2:'2', 3:'3', 4:'4', 5:'5' };
+    const EM = { 1:'😢', 2:'😕', 3:'😊', 4:'🙂', 5:'😄' };
     if (mood.data && mood.data.trend && mood.data.trend.length) {
       document.getElementById('report-mood-trend').innerHTML = mood.data.trend.map(t =>
         '<div style="text-align:center"><div style="font-size:24px">' + EM[t.mood] + '</div><div style="font-size:10px;color:var(--text-mid)">' + new Date(t.date).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + '</div></div>'
