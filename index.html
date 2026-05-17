@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMO — Saúde Mental</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #EAF6F2;
+  --teal: #7ECFC0;
+  --teal-btn: #5DCAA5;
+  --teal-deep: #1D9E75;
+  --text: #085041;
+  --text-mid: #0F6E56;
+  --border: #9FE1CB;
+  --white: #FFFFFF;
+  --error-bg: #FAECE7;
+  --error-border: #F5C4B3;
+  --error-text: #993C1D;
+  --card: #F5FBF8;
+  --shadow: 0 4px 20px rgba(8,80,65,0.08);
+  --shadow-lg: 0 8px 40px rgba(8,80,65,0.13);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.page { display: none; min-height: 100vh; flex-direction: column; }
+.page.active { display: flex; }
+.auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: linear-gradient(145deg, #EAF6F2 50%, #B5F0E0 100%); }
+.auth-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); width: 100%; max-width: 420px; overflow: hidden; }
+.auth-header { background: var(--teal); padding: 32px 24px 28px; text-align: center; }
+.bmo-emoji { font-size: 56px; line-height: 1; }
+.auth-header h1 { font-size: 26px; font-weight: 800; color: var(--text); margin-top: 10px; }
+.auth-header p { font-size: 14px; color: var(--text-mid); margin-top: 4px; }
+.auth-body { padding: 28px 28px 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+.form-group input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; font-family: 'Nunito', sans-serif; color: var(--text); background: var(--white); transition: border-color 0.2s; outline: none; }
+.form-group input:focus { border-color: var(--teal-btn); }
+.form-group input::placeholder { color: #9FD4C4; }
+.btn { width: 100%; padding: 13px; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: var(--teal-btn); color: var(--text); }
+.btn-primary:hover { background: var(--teal-deep); color: white; }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-ghost { background: none; color: var(--teal-deep); font-weight: 600; margin-top: 10px; border: none; }
+.btn-ghost:hover { text-decoration: underline; }
+.error-box { background: var(--error-bg); border: 1px solid var(--error-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; color: var(--error-text); margin-bottom: 14px; display: none; }
+.error-box.show { display: block; }
+.dash-layout { display: flex; flex-direction: column; min-height: 100vh; }
+.topbar { background: var(--teal); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(8,80,65,0.10); }
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-logo { font-size: 22px; font-weight: 800; color: var(--text); }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-user { font-size: 14px; font-weight: 600; color: var(--text-mid); }
+.btn-logout { background: var(--error-bg); border: 1px solid var(--error-border); color: var(--error-text); padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+.btn-logout:hover { background: var(--error-border); }
+.dash-body { display: flex; flex: 1; }
+.sidebar { width: 220px; background: var(--white); border-right: 1.5px solid var(--border); padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-mid); transition: all 0.2s; border: none; background: none; width: 100%; text-align: left; font-family: 'Nunito', sans-serif; }
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active { background: var(--teal); color: var(--text); }
+.nav-item .icon { font-size: 18px; }
+.nav-section { font-size: 11px; font-weight: 700; color: var(--border); text-transform: uppercase; padding: 8px 12px 4px; letter-spacing: 1px; }
+.main-content { flex: 1; padding: 28px; overflow-y: auto; max-width: 100%; }
+.section { display: none; }
+.section.active { display: block; }
+.card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.card-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.stat-card { text-align: center; padding: 16px; }
+.stat-number { font-size: 32px; font-weight: 800; color: var(--teal-deep); }
+.stat-label { font-size: 12px; color: var(--text-mid); font-weight: 600; margin-top: 4px; }
+.mood-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.mood-btn { font-size: 28px; width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.mood-btn:hover { transform: scale(1.15); border-color: var(--teal-btn); }
+.mood-btn.selected { border-color: var(--teal-deep); background: var(--teal); transform: scale(1.15); }
+.module-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.module-btn { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px 14px; cursor: pointer; text-align: center; transition: all 0.2s; font-family: 'Nunito', sans-serif; }
+.module-btn:hover { background: var(--teal); border-color: var(--teal-btn); transform: translateY(-2px); box-shadow: var(--shadow); }
+.module-btn .mod-icon { font-size: 28px; margin-bottom: 6px; }
+.module-btn .mod-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 200px); min-height: 400px; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); border-radius: var(--radius) var(--radius) 0 0; border: 1px solid var(--border); }
+.msg { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
+.msg.bmo { background: var(--white); border: 1px solid var(--border); color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg.user { background: var(--teal-btn); color: var(--text); align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg.typing { background: var(--white); border: 1px solid var(--border); color: var(--text-mid); align-self: flex-start; font-style: italic; opacity: 0.7; }
+.msg-sender { font-size: 11px; color: var(--text-mid); margin-bottom: 3px; font-weight: 600; }
+.chat-input-row { display: flex; gap: 10px; padding: 12px; background: var(--white); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); }
+.chat-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 14px; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); outline: none; }
+.chat-input:focus { border-color: var(--teal-btn); }
+.btn-send { width: 42px; height: 42px; border-radius: 50%; background: var(--teal-btn); border: none; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+.btn-send:hover { background: var(--teal-deep); }
+.task-input-row { display: flex; gap: 10px; margin-bottom: 16px; }
+.task-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'Nunito', sans-serif; background: var(--white); color: var(--text); outline: none; }
+.task-input:focus { border-color: var(--teal-btn); }
+.btn-add { padding: 10px 18px; background: var(--teal-btn); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; white-space: nowrap; }
+.btn-add:hover { background: var(--teal-deep); color: white; }
+.task-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--bg); border-radius: var(--radius-sm); margin-bottom: 8px; border: 1px solid var(--border); }
+.task-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; transition: all 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.task-check.done { background: var(--teal-btn); border-color: var(--teal-btn); color: white; }
+.task-text { flex: 1; font-size: 14px; }
+.task-text.done { text-decoration: line-through; color: var(--border); }
+.task-delete { background: none; border: none; cursor: pointer; color: var(--error-text); font-size: 16px; opacity: 0.5; transition: opacity 0.2s; }
+.task-delete:hover { opacity: 1; }
+.task-status { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+.status-pending { background: #FFF3CD; color: #856404; }
+.status-progress { background: #CCE5FF; color: #004085; }
+.status-done { background: #D4EDDA; color: #155724; }
+.profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 16px; }
+.profile-name { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.profile-email { text-align: center; font-size: 14px; color: var(--text-mid); margin-bottom: 20px; }
+.cvv-banner { background: var(--teal); border-radius: var(--radius); padding: 16px 20px; display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+.cvv-text p { font-size: 13px; color: var(--text-mid); }
+.cvv-text strong { font-size: 22px; font-weight: 800; color: var(--text); }
+.loading { text-align: center; padding: 40px; color: var(--text-mid); font-size: 14px; }
+.page-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.page-subtitle { font-size: 14px; color: var(--text-mid); margin-bottom: 20px; }
+.welcome-banner { background: var(--teal); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px; }
+.welcome-text h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+.welcome-text p { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
+.welcome-emoji { font-size: 40px; }
+.estrelas-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'Nunito', sans-serif; background: var(--white); color: var(--text); outline: none; resize: none; min-height: 100px; }
+.estrelas-msg { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; }
+.estrelas-msg p { font-size: 14px; color: var(--text); }
+.estrelas-msg small { font-size: 11px; color: var(--text-mid); margin-top: 6px; display: block; }
+.breath-circle { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--teal-btn); background: var(--teal); display: flex; align-items: center; justify-content: center; margin: 20px auto; font-size: 20px; font-weight: 800; color: var(--text); transition: all 4s ease-in-out; }
+.breath-phases { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+.phase-tag { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: var(--bg); color: var(--text-mid); border: 1px solid var(--border); }
+.phase-tag.active { background: var(--teal-btn); color: var(--text); border-color: var(--teal-btn); }
+.mood-history { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.mood-hist-item { text-align: center; }
+.mood-hist-item .emoji { font-size: 20px; }
+.mood-hist-item small { display: block; font-size: 10px; color: var(--text-mid); }
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; background: var(--bg); padding: 4px; border-radius: var(--radius-sm); }
+.tab { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Nunito', sans-serif; color: var(--text-mid); background: none; transition: all 0.2s; }
+.tab.active { background: var(--white); color: var(--text); box-shadow: var(--shadow); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.badge-green { background: #D4EDDA; color: #155724; }
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: white; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.3s; max-width: 300px; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--teal-deep); }
+.toast.error { background: var(--error-text); }
+.btn-menu { display: none; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text); }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 150; }
+.overlay.show { display: block; }
+.info-card { background: var(--bg); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); }
+.info-card-title { color: var(--teal-deep); font-weight: 700; margin-bottom: 6px; font-size: 14px; }
+.info-card-text { font-size: 13px; color: var(--text-mid); }
+@media (max-width: 768px) {
+  .sidebar { display: none; position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 200; box-shadow: var(--shadow-lg); }
+  .sidebar.mobile-open { display: flex; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .main-content { padding: 16px; }
+  .topbar { padding: 0 16px; }
+  .btn-menu { display: flex; }
+  .chat-wrap { height: calc(100vh - 160px); }
+  .module-grid { grid-template-columns: 1fr 1fr; }
+  .topbar-user { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- LOGIN -->
+<div class="page active" id="page-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="bmo-emoji">⌘</div>
+        <h1>BMO</h1>
+        <p>Bem-vindo de volta</p>
+      </div>
+      <div class="auth-body">
+        <div class="error-box" id="login-error"></div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="login-password" placeholder="Sua senha">
+        </div>
+        <button class="btn btn-primary" id="btn-login" onclick="doLogin()">Entrar</button>
+        <button class="btn btn-ghost" onclick="goTo('page-register')">Não tem conta? Cadastre-se</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CADASTRO -->
+<div class="page" id="page-register">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="bmo-emoji">⌘</div>
+        <h1>BMO</h1>
+        <p>Crie sua conta</p>
+      </div>
+      <div class="auth-body">
+        <div class="error-box" id="register-error"></div>
+        <div class="form-group">
+          <label>Nome / Apelido</label>
+          <input type="text" id="register-name" placeholder="Como quer ser chamado?">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="register-email" placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="register-password" placeholder="Mínimo 6 caracteres">
+        </div>
+        <button class="btn btn-primary" id="btn-register" onclick="doRegister()">Cadastrar</button>
+        <button class="btn btn-ghost" onclick="goTo('page-login')">Já tem conta? Faça login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="dash-layout">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="btn-menu" onclick="toggleSidebar()">☰</button>
+        <span class="topbar-logo">BMO</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-user" id="topbar-username">...</span>
+        <button class="btn-logout" onclick="doLogout()">Sair</button>
+      </div>
+    </div>
+    <div class="dash-body">
+      <div class="sidebar" id="sidebar">
+        <div class="nav-section">Principal</div>
+        <button class="nav-item active" onclick="showSection('home')"><span class="icon">⌂</span> Início</button>
+        <button class="nav-item" onclick="showSection('chatbot')"><span class="icon">⚙</span> Chatbot IA</button>
+        <button class="nav-item" onclick="showSection('tasks')"><span class="icon">✔</span> Tarefas</button>
+        <button class="nav-item" onclick="showSection('mood')"><span class="icon">☺</span> Humor</button>
+        <div class="nav-section">Mais</div>
+        <button class="nav-item" onclick="showSection('estrelas')"><span class="icon">≈</span> Estrelas Pontilhadas</button>
+        <button class="nav-item" onclick="showSection('respiracao')"><span class="icon">⟲</span> Respiração</button>
+        <button class="nav-item" onclick="showSection('relatorios')"><span class="icon">▣</span> Relatórios</button>
+        <button class="nav-item" onclick="showSection('perfil')"><span class="icon">⊛</span> Perfil</button>
+      </div>
+
+      <div class="main-content">
+
+        <!-- HOME -->
+        <div class="section active" id="section-home">
+          <div class="welcome-banner">
+            <div class="welcome-emoji">✦</div>
+            <div class="welcome-text">
+              <h2>Olá de volta, <span id="home-username">amigo</span>!</h2>
+              <p>Como você está se sentindo hoje?</p>
+            </div>
+          </div>
+          <div class="grid-2" style="margin-bottom:16px">
+            <div class="card">
+              <div class="card-title">Humor de hoje</div>
+              <div class="mood-row">
+                <button class="mood-btn" onclick="sendMood(1)" title="Muito ruim">😢</button>
+                <button class="mood-btn" onclick="sendMood(2)" title="Ruim">😕</button>
+                <button class="mood-btn" onclick="sendMood(3)" title="Neutro">😊</button>
+                <button class="mood-btn" onclick="sendMood(4)" title="Bem">😄</button>
+                <button class="mood-btn" onclick="sendMood(5)" title="Muito bem">🤩</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Minhas Tarefas</div>
+              <div class="grid-3">
+                <div class="stat-card">
+                  <div class="stat-number" id="stat-pending">-</div>
+                  <div class="stat-label">Pendentes</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-number" id="stat-progress">-</div>
+                  <div class="stat-label">Em progresso</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-number" id="stat-done">-</div>
+                  <div class="stat-label">Concluídas</div>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="margin-top:12px" onclick="showSection('tasks')">Ver todas →</button>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title">Módulos</div>
+            <div class="module-grid">
+              <div class="module-btn" onclick="showSection('chatbot')"><div class="mod-icon">⚙</div><div class="mod-name">Chatbot IA</div></div>
+              <div class="module-btn" onclick="showSection('estrelas')"><div class="mod-icon">≈</div><div class="mod-name">Estrelas Pontilhadas</div></div>
+              <div class="module-btn" onclick="showSection('respiracao')"><div class="mod-icon">⟲</div><div class="mod-name">Respiração</div></div>
+              <div class="module-btn" onclick="showSection('relatorios')"><div class="mod-icon">▣</div><div class="mod-name">Relatórios</div></div>
+            </div>
+          </div>
+          <div class="cvv-banner">
+            <div style="font-size:28px">ℹ</div>
+            <div class="cvv-text">
+              <p>Precisa de ajuda? Centro de Valorização da Vida</p>
+              <strong>188</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHATBOT -->
+        <div class="section" id="section-chatbot">
+          <div class="page-title">Chatbot IA</div>
+          <p class="page-subtitle">Converse com o BMO sobre como você está se sentindo</p>
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="chat-wrap">
+              <div class="chat-messages" id="chat-messages">
+                <div><div class="msg-sender">BMO</div><div class="msg bmo">Olá! Sou o BMO, seu assistente de saúde mental. Como você está se sentindo hoje?</div></div>
+              </div>
+              <div class="chat-input-row">
+                <input class="chat-input" id="chat-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter') sendChat()">
+                <button class="btn-send" onclick="sendChat()">➤</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TASKS -->
+        <div class="section" id="section-tasks">
+          <div class="page-title">Minhas Tarefas</div>
+          <div class="card">
+            <div class="task-input-row">
+              <input class="task-input" id="task-input" placeholder="Nova tarefa..." onkeydown="if(event.key==='Enter') addTask()">
+              <button class="btn-add" onclick="addTask()">+ Adicionar</button>
+            </div>
+            <div class="tabs">
+              <button class="tab active" onclick="filterTasks('all', this)">Todas</button>
+              <button class="tab" onclick="filterTasks('PENDING', this)">Pendentes</button>
+              <button class="tab" onclick="filterTasks('IN_PROGRESS', this)">Em Progresso</button>
+              <button class="tab" onclick="filterTasks('DONE', this)">Concluídas</button>
+            </div>
+            <div id="tasks-list"><div class="loading">Carregando tarefas...</div></div>
+          </div>
+        </div>
+
+        <!-- MOOD -->
+        <div class="section" id="section-mood">
+          <div class="page-title">Diário de Humor</div>
+          <div class="grid-2" style="margin-bottom:16px">
+            <div class="card">
+              <div class="card-title">Como você está agora?</div>
+              <div class="mood-row" style="margin-bottom:16px">
+                <button class="mood-btn" onclick="sendMoodFull(1)">1</button>
+                <button class="mood-btn" onclick="sendMoodFull(2)">2</button>
+                <button class="mood-btn" onclick="sendMoodFull(3)">3</button>
+                <button class="mood-btn" onclick="sendMoodFull(4)">4</button>
+                <button class="mood-btn" onclick="sendMoodFull(5)">5</button>
+              </div>
+              <textarea class="estrelas-input" id="mood-note" placeholder="Adicione uma nota (opcional)..." style="min-height:80px"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-title">Estatísticas</div>
+              <div id="mood-stats"><div class="loading">Carregando...</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Histórico recente</div>
+            <div id="mood-history"><div class="loading">Carregando...</div></div>
+          </div>
+        </div>
+
+        <!-- ESTRELAS -->
+        <div class="section" id="section-estrelas">
+          <div class="page-title">Estrelas Pontilhadas</div>
+          <p class="page-subtitle">Envie mensagens anônimas e receba mensagens de apoio</p>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title">Enviar ao Mar</div>
+            <textarea class="estrelas-input" id="estrelas-input" placeholder="Escreva sua mensagem anônima aqui... O que você está sentindo?"></textarea>
+            <p style="font-size:12px;color:var(--text-mid);margin:8px 0 12px">Sua mensagem será enviada de forma completamente anônima.</p>
+            <button class="btn btn-primary" onclick="showToast('Em breve! API sendo implementada', 'success')">Enviar ao Mar</button>
+          </div>
+          <div class="card">
+            <div class="card-title">Mensagens Recebidas</div>
+            <div class="estrelas-msg"><p>Hoje percebi que está tudo bem não estar bem o tempo todo. Às vezes a gente só precisa respirar fundo e seguir.</p><small>Recebida hoje</small></div>
+            <div class="estrelas-msg"><p>Você é mais forte do que imagina. Continue!</p><small>Recebida ontem</small></div>
+            <p style="font-size:12px;color:var(--text-mid);text-align:center;margin-top:8px">API em desenvolvimento — em breve funcionalidade completa!</p>
+          </div>
+        </div>
+
+        <!-- RESPIRACAO -->
+        <div class="section" id="section-respiracao">
+          <div class="page-title">Respiração Guiada</div>
+          <p class="page-subtitle">Técnica 4-7-8 para reduzir ansiedade</p>
+          <div class="card" style="text-align:center">
+            <div class="breath-phases">
+              <span class="phase-tag active" id="phase-inhale">INALAR</span>
+              <span class="phase-tag" id="phase-hold">SEGURAR</span>
+              <span class="phase-tag" id="phase-exhale">EXALAR</span>
+              <span class="phase-tag" id="phase-pause">PAUSA</span>
+            </div>
+            <div class="breath-circle" id="breath-circle">Inalar</div>
+            <div style="font-size:32px;font-weight:800;color:var(--teal-deep);margin:8px 0" id="breath-count">4</div>
+            <button class="btn btn-primary" style="max-width:200px;margin:0 auto" id="btn-breath" onclick="toggleBreath()">Começar</button>
+            <div style="margin-top:20px;text-align:left">
+              <div class="info-card"><div class="info-card-title">Por que respirar?</div><p class="info-card-text">A respiração rítmica ajuda a baixar os níveis de cortisol e avisa ao seu cérebro que você está seguro.</p></div>
+              <div class="info-card"><div class="info-card-title">Dica do BMO</div><p class="info-card-text">Tente inalar pelo nariz e exalar suavemente pela boca, como se estivesse soprando uma vela.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RELATORIOS -->
+        <div class="section" id="section-relatorios">
+          <div class="page-title">Relatórios</div>
+          <p class="page-subtitle">Acompanhe sua evolução de bem-estar</p>
+          <div class="grid-2" style="margin-bottom:16px">
+            <div class="card">
+              <div class="card-title">Tendência de Humor</div>
+              <div id="report-mood-trend" style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;min-height:80px"><div class="loading">Carregando...</div></div>
+            </div>
+            <div class="card">
+              <div class="card-title">Produtividade</div>
+              <div id="report-tasks-stats"><div class="loading">Carregando...</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Evolução do Humor</div>
+            <p style="font-size:13px;color:var(--text-mid);text-align:center;padding:20px">Registre seu humor diariamente para ver sua evolução completa aqui!</p>
+          </div>
+        </div>
+
+        <!-- PERFIL -->
+        <div class="section" id="section-perfil">
+          <div class="page-title">Perfil</div>
+          <div class="grid-2">
+            <div class="card">
+              <div class="profile-avatar">BMO</div>
+              <div class="profile-name" id="profile-name">Carregando...</div>
+              <div class="profile-email" id="profile-email">...</div>
+              <div class="form-group">
+                <label>Nome</label>
+                <input type="text" id="profile-input-name" placeholder="Seu nome">
+              </div>
+              <div class="form-group">
+                <label>Bio</label>
+                <input type="text" id="profile-input-bio" placeholder="Fale um pouco sobre você">
+              </div>
+              <button class="btn btn-primary" onclick="showToast('Em breve!', 'success')">Salvar alterações</button>
+            </div>
+            <div>
+              <div class="card" style="margin-bottom:16px">
+                <div class="card-title">Resumo</div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--bg);border-radius:8px"><span style="font-size:14px">Tarefas totais</span><span class="badge badge-green" id="profile-tasks-total">-</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--bg);border-radius:8px"><span style="font-size:14px">Registros de humor</span><span class="badge badge-green" id="profile-mood-total">-</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-title">Conta</div>
+                <button class="btn" style="background:var(--error-bg);color:var(--error-text);border:1px solid var(--error-border)" onclick="doLogout()">Sair da conta</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://bmoapp.onrender.com/api/v1';
+let token = localStorage.getItem('bmo_token') || '';
+let userName = localStorage.getItem('bmo_username') || '';
+let chatHistory = [];
+let breathInterval = null;
+let breathRunning = false;
+
+window.onload = () => { if (token) startDashboard(); };
+
+function goTo(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    const t = n.textContent.trim().toLowerCase();
+    if ((name === 'home' && t.includes('início')) || t.includes(name)) n.classList.add('active');
+  });
+  closeSidebar();
+  if (name === 'tasks') loadTasks();
+  if (name === 'mood') loadMood();
+  if (name === 'relatorios') loadReports();
+  if (name === 'perfil') loadProfile();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function authHeaders() {
+  return { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const err = document.getElementById('login-error');
+  const btn = document.getElementById('btn-login');
+  err.classList.remove('show');
+  if (!email || !pass) { err.textContent = 'Preencha email e senha'; err.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Aguarde...';
+  try {
+    const res = await fetch(API + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: pass }) });
+    const data = await res.json();
+    if (res.ok && data.data) {
+      token = data.data.token;
+      userName = data.data.user.name;
+      localStorage.setItem('bmo_token', token);
+      localStorage.setItem('bmo_username', userName);
+      startDashboard();
+    } else {
+      err.textContent = data.message || 'Email ou senha incorretos';
+      err.classList.add('show');
+    }
+  } catch(e) { err.textContent = 'Erro de conexão. Tente novamente.'; err.classList.add('show'); }
+  btn.disabled = false; btn.textContent = 'Entrar';
+}
+
+async function doRegister() {
+  const name = document.getElementById('register-name').value.trim();
+  const email = document.getElementById('register-email').value.trim();
+  const pass = document.getElementById('register-password').value;
+  const err = document.getElementById('register-error');
+  const btn = document.getElementById('btn-register');
+  err.classList.remove('show');
+  if (!name || !email || !pass) { err.textContent = 'Preencha todos os campos'; err.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Aguarde...';
+  try {
+    const res = await fetch(API + '/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password: pass }) });
+    const data = await res.json();
+    if ((res.status === 201 || res.ok) && data.data) {
+      token = data.data.token;
+      userName = data.data.user.name;
+      localStorage.setItem('bmo_token', token);
+      localStorage.setItem('bmo_username', userName);
+      startDashboard();
+    } else {
+      err.textContent = data.message || 'Erro ao cadastrar. Tente outro email.';
+      err.classList.add('show');
+    }
+  } catch(e) { err.textContent = 'Erro de conexão.'; err.classList.add('show'); }
+  btn.disabled = false; btn.textContent = 'Cadastrar';
+}
+
+function doLogout() {
+  token = ''; userName = '';
+  localStorage.removeItem('bmo_token');
+  localStorage.removeItem('bmo_username');
+  chatHistory = [];
+  goTo('page-login');
+}
+
+function startDashboard() {
+  goTo('page-dashboard');
+  document.getElementById('topbar-username').textContent = userName || 'Usuário';
+  document.getElementById('home-username').textContent = userName || 'amigo';
+  loadHomeData();
+}
+
+async function loadHomeData() {
+  try {
+    const res = await fetch(API + '/tasks/stats', { headers: authHeaders() });
+    const data = await res.json();
+    if (data.data) {
+      document.getElementById('stat-pending').textContent = data.data.pending ?? 0;
+      document.getElementById('stat-progress').textContent = data.data.inProgress ?? 0;
+      document.getElementById('stat-done').textContent = data.data.done ?? 0;
+    }
+  } catch(e) {}
+}
+
+async function sendMood(val) {
+  document.querySelectorAll('#section-home .mood-btn').forEach((b,i) => b.classList.toggle('selected', i === val-1));
+  try {
+    await fetch(API + '/mood', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ mood: val }) });
+    showToast('Humor registrado!', 'success');
+  } catch(e) { showToast('Erro ao registrar humor', 'error'); }
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  appendMsg('user', msg);
+  chatHistory.push({ role: 'user', content: msg });
+  const typingDiv = appendTyping();
+  try {
+    const res = await fetch(API + '/chatbot/message', {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ message: msg, history: chatHistory.slice(-10) })
+    });
+    const data = await res.json();
+    typingDiv.remove();
+    if (data.data && data.data.reply) {
+      appendMsg('bmo', data.data.reply);
+      chatHistory.push({ role: 'assistant', content: data.data.reply });
+    } else {
+      appendMsg('bmo', 'Desculpe, tive um problema. Tente novamente.');
+    }
+  } catch(e) { typingDiv.remove(); appendMsg('bmo', 'Sem conexão. Verifique sua internet.'); }
+}
+
+function appendMsg(type, text) {
+  const c = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.innerHTML = '<div class="msg-sender">' + (type === 'bmo' ? 'BMO' : 'Você') + '</div><div class="msg ' + type + '">' + text + '</div>';
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+  return d;
+}
+
+function appendTyping() {
+  const c = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'msg typing';
+  d.textContent = 'BMO está digitando...';
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+  return d;
+}
+
+async function loadTasks(filter) {
+  const list = document.getElementById('tasks-list');
+  list.innerHTML = '<div class="loading">Carregando...</div>';
+  try {
+    const url = (!filter || filter === 'all') ? API + '/tasks' : API + '/tasks?status=' + filter;
+    const res = await fetch(url, { headers: authHeaders() });
+    const data = await res.json();
+    const tasks = data.data || [];
+    if (!tasks.length) { list.innerHTML = '<div class="loading">Nenhuma tarefa encontrada</div>'; return; }
+    const CL = { PENDING: 'status-pending', IN_PROGRESS: 'status-progress', DONE: 'status-done' };
+    const LB = { PENDING: 'Pendente', IN_PROGRESS: 'Em Progresso', DONE: 'Concluída' };
+    list.innerHTML = tasks.map(t =>
+      '<div class="task-item">' +
+      '<div class="task-check ' + (t.status === 'DONE' ? 'done' : '') + '" onclick="toggleTask(\'' + t.id + '\',\'' + t.status + '\')">' + (t.status === 'DONE' ? '✓' : '') + '</div>' +
+      '<span class="task-text ' + (t.status === 'DONE' ? 'done' : '') + '">' + t.title + '</span>' +
+      '<span class="task-status ' + CL[t.status] + '">' + LB[t.status] + '</span>' +
+      '<button class="task-delete" onclick="deleteTask(\'' + t.id + '\')">✕</button>' +
+      '</div>'
+    ).join('');
+  } catch(e) { list.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
+}
+
+async function addTask() {
+  const input = document.getElementById('task-input');
+  const title = input.value.trim();
+  if (!title) return;
+  input.value = '';
+  try {
+    const res = await fetch(API + '/tasks', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ title }) });
+    if (res.ok) { showToast('Tarefa criada!', 'success'); loadTasks(); loadHomeData(); }
+  } catch(e) { showToast('Erro ao criar tarefa', 'error'); }
+}
+
+async function toggleTask(id, status) {
+  const newStatus = status === 'DONE' ? 'PENDING' : 'DONE';
+  try {
+    await fetch(API + '/tasks/' + id, { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ status: newStatus }) });
+    loadTasks(); loadHomeData();
+  } catch(e) { showToast('Erro ao atualizar', 'error'); }
+}
+
+async function deleteTask(id) {
+  try {
+    await fetch(API + '/tasks/' + id, { method: 'DELETE', headers: authHeaders() });
+    showToast('Tarefa removida', 'success'); loadTasks(); loadHomeData();
+  } catch(e) { showToast('Erro ao remover', 'error'); }
+}
+
+function filterTasks(filter, btn) {
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  loadTasks(filter);
+}
+
+async function sendMoodFull(val) {
+  document.querySelectorAll('#section-mood .mood-btn').forEach((b,i) => b.classList.toggle('selected', i === val-1));
+  const note = document.getElementById('mood-note').value;
+  try {
+    await fetch(API + '/mood', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ mood: val, note: note || undefined }) });
+    showToast('Humor registrado!', 'success');
+    document.getElementById('mood-note').value = '';
+    loadMood();
+  } catch(e) { showToast('Erro ao registrar', 'error'); }
+}
+
+async function loadMood() {
+  try {
+    const [h, s] = await Promise.all([
+      fetch(API + '/mood?limit=7', { headers: authHeaders() }),
+      fetch(API + '/mood/stats', { headers: authHeaders() })
+    ]);
+    const hist = await h.json();
+    const stats = await s.json();
+    const EM = { 1:'1', 2:'2', 3:'3', 4:'4', 5:'5' };
+    if (hist.data && hist.data.length) {
+      document.getElementById('mood-history').innerHTML = '<div class="mood-history">' +
+        hist.data.map(e => '<div class="mood-hist-item"><div class="emoji">' + EM[e.mood] + '</div><small>' + new Date(e.createdAt).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + '</small></div>').join('') +
+        '</div>';
+    } else {
+      document.getElementById('mood-history').innerHTML = '<div class="loading">Nenhum registro ainda</div>';
+    }
+    if (stats.data) {
+      const d = stats.data;
+      document.getElementById('mood-stats').innerHTML =
+        '<div style="display:flex;flex-direction:column;gap:8px">' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span style="font-size:14px">Média</span><span style="font-weight:700">' + (d.average ?? '-') + ' ' + (d.averageLabel || '') + '</span></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span style="font-size:14px">Total</span><span style="font-weight:700">' + (d.total ?? 0) + ' registros</span></div>' +
+        '</div>';
+    }
+  } catch(e) {}
+}
+
+async function loadReports() {
+  try {
+    const [sr, mr] = await Promise.all([
+      fetch(API + '/tasks/stats', { headers: authHeaders() }),
+      fetch(API + '/mood/stats', { headers: authHeaders() })
+    ]);
+    const stats = await sr.json();
+    const mood = await mr.json();
+    if (stats.data) {
+      const d = stats.data;
+      document.getElementById('report-tasks-stats').innerHTML =
+        '<div style="display:flex;flex-direction:column;gap:8px">' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span>Pendentes</span><b>' + (d.pending??0) + '</b></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span>Em progresso</span><b>' + (d.inProgress??0) + '</b></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span>Concluídas</span><b>' + (d.done??0) + '</b></div>' +
+        '</div>';
+    }
+    const EM = { 1:'1', 2:'2', 3:'3', 4:'4', 5:'5' };
+    if (mood.data && mood.data.trend && mood.data.trend.length) {
+      document.getElementById('report-mood-trend').innerHTML = mood.data.trend.map(t =>
+        '<div style="text-align:center"><div style="font-size:24px">' + EM[t.mood] + '</div><div style="font-size:10px;color:var(--text-mid)">' + new Date(t.date).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + '</div></div>'
+      ).join('');
+    } else {
+      document.getElementById('report-mood-trend').innerHTML = '<div class="loading">Registre seu humor para ver a tendência!</div>';
+    }
+  } catch(e) {}
+}
+
+async function loadProfile() {
+  try {
+    const [pr, tr, mr] = await Promise.all([
+      fetch(API + '/users/me', { headers: authHeaders() }),
+      fetch(API + '/tasks/stats', { headers: authHeaders() }),
+      fetch(API + '/mood/stats', { headers: authHeaders() })
+    ]);
+    const prof = await pr.json();
+    const tasks = await tr.json();
+    const mood = await mr.json();
+    if (prof.data) {
+      document.getElementById('profile-name').textContent = prof.data.name;
+      document.getElementById('profile-email').textContent = prof.data.email;
+      document.getElementById('profile-input-name').value = prof.data.name;
+      document.getElementById('profile-input-bio').value = prof.data.bio || '';
+    }
+    if (tasks.data) document.getElementById('profile-tasks-total').textContent = tasks.data.total ?? 0;
+    if (mood.data) document.getElementById('profile-mood-total').textContent = mood.data.total ?? 0;
+  } catch(e) {}
+}
+
+const breathPhases = [
+  { label:'Inalar', dur:4, id:'phase-inhale', size:'220px' },
+  { label:'Segurar', dur:7, id:'phase-hold', size:'220px' },
+  { label:'Exalar', dur:8, id:'phase-exhale', size:'170px' },
+  { label:'Pausa', dur:4, id:'phase-pause', size:'170px' },
+];
+let breathPhaseIdx = 0;
+
+function toggleBreath() {
+  const btn = document.getElementById('btn-breath');
+  if (breathRunning) {
+    clearInterval(breathInterval);
+    breathRunning = false;
+    btn.textContent = 'Começar';
+    document.getElementById('breath-circle').textContent = 'Inalar';
+    document.getElementById('breath-count').textContent = '4';
+    document.querySelectorAll('.phase-tag').forEach((t,i) => t.classList.toggle('active', i===0));
+  } else {
+    breathRunning = true;
+    btn.textContent = 'Parar';
+    breathPhaseIdx = 0;
+    runBreathPhase();
+  }
+}
+
+function runBreathPhase() {
+  if (!breathRunning) return;
+  const p = breathPhases[breathPhaseIdx];
+  const circle = document.getElementById('breath-circle');
+  const count = document.getElementById('breath-count');
+  circle.textContent = p.label;
+  circle.style.width = p.size;
+  circle.style.height = p.size;
+  count.textContent = p.dur;
+  document.querySelectorAll('.phase-tag').forEach(t => t.classList.remove('active'));
+  document.getElementById(p.id).classList.add('active');
+  let c = p.dur;
+  clearInterval(breathInterval);
+  breathInterval = setInterval(() => {
+    c--;
+    count.textContent = c;
+    if (c <= 0) {
+      clearInterval(breathInterval);
+      breathPhaseIdx = (breathPhaseIdx + 1) % breathPhases.length;
+      if (breathRunning) runBreathPhase();
+    }
+  }, 1000);
+}
+
+document.getElementById('login-password').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('register-password').addEventListener('keydown', e => { if(e.key==='Enter') doRegister(); });
+</script>
+</body>
+</html>
