@@ -66,6 +66,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
 .material-icons { font-family: 'Material Icons'; font-weight: normal; font-style: normal; font-size: inherit; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; }
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
 .nav-section { font-size: 11px; font-weight: 700; color: var(--border); text-transform: uppercase; padding: 8px 12px 4px; letter-spacing: 1px; }
 .main-content { flex: 1; padding: 28px; overflow-y: auto; max-width: 100%; }
 .section { display: none; }
@@ -91,6 +92,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
 .msg { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
 .msg.bmo { background: var(--white); border: 1px solid var(--border); color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; }
 .msg.user { background: var(--teal-btn); color: var(--text); align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg.other { background: var(--white); border: 1px solid var(--border); color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; }
 .msg.typing { background: var(--white); border: 1px solid var(--border); color: var(--text-mid); align-self: flex-start; font-style: italic; opacity: 0.7; }
 .msg-sender { font-size: 11px; color: var(--text-mid); margin-bottom: 3px; font-weight: 600; }
 .chat-input-row { display: flex; gap: 10px; padding: 12px; background: var(--white); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); }
@@ -154,6 +156,11 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
 .info-card { background: var(--bg); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); }
 .info-card-title { color: var(--teal-deep); font-weight: 700; margin-bottom: 6px; font-size: 14px; }
 .info-card-text { font-size: 13px; color: var(--text-mid); }
+.room-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg); border-radius: var(--radius-sm); margin-bottom: 8px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.room-item:hover { background: var(--teal); }
+.room-item.active { background: var(--teal); border-color: var(--teal-btn); }
+.room-name { font-size: 14px; font-weight: 600; }
+.room-count { font-size: 11px; color: var(--text-mid); }
 @media (max-width: 768px) {
   .sidebar { display: none; position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 200; box-shadow: var(--shadow-lg); }
   .sidebar.mobile-open { display: flex; }
@@ -178,7 +185,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
   <div class="auth-wrap">
     <div class="auth-card">
       <div class="auth-header">
-        <div class="bmo-emoji"><span class="material-icons md-48">psychology</span></div>
+        <div class="bmo-emoji"><span class="material-icons md-36">psychology</span></div>
         <h1>BMO</h1>
         <p>Bem-vindo de volta</p>
       </div>
@@ -204,7 +211,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
   <div class="auth-wrap">
     <div class="auth-card">
       <div class="auth-header">
-        <div class="bmo-emoji"><span class="material-icons md-48">psychology</span></div>
+        <div class="bmo-emoji"><span class="material-icons md-36">psychology</span></div>
         <h1>BMO</h1>
         <p>Crie sua conta</p>
       </div>
@@ -235,7 +242,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
     <div class="topbar">
       <div class="topbar-left">
         <button class="btn-menu" onclick="toggleSidebar()"><span class="material-icons md-24">menu</span></button>
-        <span class="topbar-logo">BMO</span>
+        <span class="topbar-logo"><span class="material-icons md-18">psychology</span> BMO</span>
       </div>
       <div class="topbar-right">
         <span class="topbar-user" id="topbar-username">...</span>
@@ -245,15 +252,16 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
     <div class="dash-body">
       <div class="sidebar" id="sidebar">
         <div class="nav-section">Principal</div>
-        <button class="nav-item active" onclick="showSection('home')"><span class="material-icons icon">home</span> Início</button>
-        <button class="nav-item" onclick="showSection('chatbot')"><span class="material-icons icon">chat</span> Chatbot IA</button>
-        <button class="nav-item" onclick="showSection('tasks')"><span class="material-icons icon">task_alt</span> Tarefas</button>
-        <button class="nav-item" onclick="showSection('mood')"><span class="material-icons icon">mood</span> Humor</button>
+        <button class="nav-item active" onclick="showSection('home')"><span class="material-icons md-18 icon">home</span> Início</button>
+        <button class="nav-item" onclick="showSection('chatbot')"><span class="material-icons md-18 icon">smart_toy</span> BMO IA</button>
+        <button class="nav-item" onclick="showSection('chat')"><span class="material-icons md-18 icon">chat</span> Chat Geral</button>
+        <button class="nav-item" onclick="showSection('tasks')"><span class="material-icons md-18 icon">task_alt</span> Tarefas</button>
+        <button class="nav-item" onclick="showSection('mood')"><span class="material-icons md-18 icon">mood</span> Humor</button>
         <div class="nav-section">Mais</div>
-        <button class="nav-item" onclick="showSection('estrelas')"><span class="material-icons icon">auto_awesome</span> Estrelas Pontilhadas</button>
-        <button class="nav-item" onclick="showSection('respiracao')"><span class="material-icons icon">self_improvement</span> Respiração</button>
-        <button class="nav-item" onclick="showSection('relatorios')"><span class="material-icons icon">analytics</span> Relatórios</button>
-        <button class="nav-item" onclick="showSection('perfil')"><span class="material-icons icon">person</span> Perfil</button>
+        <button class="nav-item" onclick="showSection('estrelas')"><span class="material-icons md-18 icon">stars</span> Estrelas Pontilhadas</button>
+        <button class="nav-item" onclick="showSection('respiracao')"><span class="material-icons md-18 icon">air</span> Respiração</button>
+        <button class="nav-item" onclick="showSection('relatorios')"><span class="material-icons md-18 icon">insights</span> Relatórios</button>
+        <button class="nav-item" onclick="showSection('perfil')"><span class="material-icons md-18 icon">person</span> Perfil</button>
       </div>
 
       <div class="main-content">
@@ -261,7 +269,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
         <!-- HOME -->
         <div class="section active" id="section-home">
           <div class="welcome-banner">
-            <div class="welcome-emoji"><span class="material-icons md-24">emoji_objects</span></div>
+            <div class="welcome-emoji"><span class="material-icons md-36">favorite</span></div>
             <div class="welcome-text">
               <h2>Olá de volta, <span id="home-username">amigo</span>!</h2>
               <p>Como você está se sentindo hoje?</p>
@@ -269,7 +277,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
           </div>
           <div class="grid-2" style="margin-bottom:16px">
             <div class="card">
-              <div class="card-title">Humor de hoje</div>
+              <div class="card-title">😊 Humor de hoje</div>
               <div class="mood-row">
                 <button class="mood-btn" onclick="sendMood(1)" title="Muito ruim">😢</button>
                 <button class="mood-btn" onclick="sendMood(2)" title="Ruim">😕</button>
@@ -279,7 +287,7 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
               </div>
             </div>
             <div class="card">
-              <div class="card-title">Minhas Tarefas</div>
+              <div class="card-title"><span class="material-icons md-18">task_alt</span> Minhas Tarefas</div>
               <div class="grid-3">
                 <div class="stat-card">
                   <div class="stat-number" id="stat-pending">-</div>
@@ -298,16 +306,16 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
             </div>
           </div>
           <div class="card" style="margin-bottom:16px">
-            <div class="card-title">Módulos</div>
+            <div class="card-title"><span class="material-icons md-18">apps</span> Módulos</div>
             <div class="module-grid">
-              <div class="module-btn" onclick="showSection('chatbot')"><div class="mod-icon material-icons md-24">chat</div><div class="mod-name">Chatbot IA</div></div>
-              <div class="module-btn" onclick="showSection('estrelas')"><div class="mod-icon material-icons md-24">auto_awesome</div><div class="mod-name">Estrelas Pontilhadas</div></div>
-              <div class="module-btn" onclick="showSection('respiracao')"><div class="mod-icon material-icons md-24">self_improvement</div><div class="mod-name">Respiração</div></div>
-              <div class="module-btn" onclick="showSection('relatorios')"><div class="mod-icon material-icons md-24">bar_chart</div><div class="mod-name">Relatórios</div></div>
+              <div class="module-btn" onclick="showSection('chatbot')"><div class="mod-icon"><span class="material-icons md-36">smart_toy</span></div><div class="mod-name">BMO IA</div></div>
+              <div class="module-btn" onclick="showSection('chat')"><div class="mod-icon"><span class="material-icons md-36">chat</span></div><div class="mod-name">Chat Geral</div></div>
+              <div class="module-btn" onclick="showSection('estrelas')"><div class="mod-icon"><span class="material-icons md-36">stars</span></div><div class="mod-name">Estrelas Pontilhadas</div></div>
+              <div class="module-btn" onclick="showSection('respiracao')"><div class="mod-icon"><span class="material-icons md-36">air</span></div><div class="mod-name">Respiração</div></div>
             </div>
           </div>
           <div class="cvv-banner">
-            <div style="font-size:28px"><span class="material-icons md-24">support_agent</span></div>
+            <div style="font-size:28px"><span class="material-icons md-36">support_agent</span></div>
             <div class="cvv-text">
               <p>Precisa de ajuda? Centro de Valorização da Vida</p>
               <strong>188</strong>
@@ -315,9 +323,9 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
           </div>
         </div>
 
-        <!-- CHATBOT -->
+        <!-- CHATBOT IA -->
         <div class="section" id="section-chatbot">
-          <div class="page-title">Chatbot IA</div>
+          <div class="page-title"><span class="material-icons md-18">smart_toy</span> BMO IA</div>
           <p class="page-subtitle">Converse com o BMO sobre como você está se sentindo</p>
           <div class="card" style="padding:0;overflow:hidden">
             <div class="chat-wrap">
@@ -332,9 +340,40 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
           </div>
         </div>
 
+        <!-- CHAT GERAL -->
+        <div class="section" id="section-chat">
+          <div class="page-title"><span class="material-icons md-18">forum</span> Chat Geral</div>
+          <p class="page-subtitle">Converse com outras pessoas em tempo real</p>
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="material-icons md-18">meeting_room</span> Salas disponíveis</div>
+              <div id="chat-rooms-list"><div class="loading">Carregando salas...</div></div>
+              <button class="btn btn-primary" style="margin-top:12px" onclick="toggleCreateRoom()">+ Nova sala</button>
+              <div id="create-room-form" style="display:none;margin-top:12px">
+                <div class="task-input-row">
+                  <input class="task-input" id="room-name-input" placeholder="Nome da sala..." onkeydown="if(event.key==='Enter') createRoom()">
+                  <button class="btn-add" onclick="createRoom()">Criar</button>
+                </div>
+              </div>
+            </div>
+            <div class="card" style="padding:0;overflow:hidden">
+              <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:15px" id="chat-room-title"><span class="material-icons md-18">chat</span> Selecione uma sala</div>
+              <div style="display:flex;flex-direction:column;height:420px">
+                <div class="chat-messages" id="chat-room-messages" style="border:none;border-radius:0;flex:1">
+                  <div class="loading">Entre em uma sala para começar</div>
+                </div>
+                <div class="chat-input-row" id="chat-room-input-row" style="display:none;border:none;border-top:1px solid var(--border);border-radius:0">
+                  <input class="chat-input" id="chat-room-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter') sendRoomMessage()">
+                  <button class="btn-send" onclick="sendRoomMessage()"><span class="material-icons md-18">send</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- TASKS -->
         <div class="section" id="section-tasks">
-          <div class="page-title">Minhas Tarefas</div>
+          <div class="page-title"><span class="material-icons md-18">task_alt</span> Minhas Tarefas</div>
           <div class="card">
             <div class="task-input-row">
               <input class="task-input" id="task-input" placeholder="Nova tarefa..." onkeydown="if(event.key==='Enter') addTask()">
@@ -352,51 +391,49 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
 
         <!-- MOOD -->
         <div class="section" id="section-mood">
-          <div class="page-title">Diário de Humor</div>
+          <div class="page-title">😊 Diário de Humor</div>
           <div class="grid-2" style="margin-bottom:16px">
             <div class="card">
               <div class="card-title">Como você está agora?</div>
               <div class="mood-row" style="margin-bottom:16px">
-                <button class="mood-btn" onclick="sendMoodFull(1)" title="Muito ruim">😢</button>
-                <button class="mood-btn" onclick="sendMoodFull(2)" title="Ruim">😕</button>
-                <button class="mood-btn" onclick="sendMoodFull(3)" title="Neutro">😐</button>
-                <button class="mood-btn" onclick="sendMoodFull(4)" title="Bem">🙂</button>
-                <button class="mood-btn" onclick="sendMoodFull(5)" title="Muito bem">😄</button>
+                <button class="mood-btn" onclick="sendMoodFull(1)">😢</button>
+                <button class="mood-btn" onclick="sendMoodFull(2)">😕</button>
+                <button class="mood-btn" onclick="sendMoodFull(3)">😊</button>
+                <button class="mood-btn" onclick="sendMoodFull(4)">😄</button>
+                <button class="mood-btn" onclick="sendMoodFull(5)">🤩</button>
               </div>
               <textarea class="estrelas-input" id="mood-note" placeholder="Adicione uma nota (opcional)..." style="min-height:80px"></textarea>
             </div>
             <div class="card">
-              <div class="card-title">Estatísticas</div>
+              <div class="card-title"><span class="material-icons md-18">query_stats</span> Estatísticas</div>
               <div id="mood-stats"><div class="loading">Carregando...</div></div>
             </div>
           </div>
           <div class="card">
-            <div class="card-title">Histórico recente</div>
+            <div class="card-title"><span class="material-icons md-18">history</span> Histórico recente</div>
             <div id="mood-history"><div class="loading">Carregando...</div></div>
           </div>
         </div>
 
-        <!-- ESTRELAS -->
+        <!-- ESTRELAS PONTILHADAS -->
         <div class="section" id="section-estrelas">
-          <div class="page-title">Estrelas Pontilhadas</div>
-          <p class="page-subtitle">Envie mensagens anônimas e receba mensagens de apoio</p>
+          <div class="page-title"><span class="material-icons md-18">stars</span> Estrelas Pontilhadas</div>
+          <p class="page-subtitle">Envie mensagens anônimas ao mar e receba mensagens de apoio</p>
           <div class="card" style="margin-bottom:16px">
-            <div class="card-title">Enviar ao Mar</div>
+            <div class="card-title"><span class="material-icons md-18">send</span> Enviar ao Mar</div>
             <textarea class="estrelas-input" id="estrelas-input" placeholder="Escreva sua mensagem anônima aqui... O que você está sentindo?"></textarea>
-            <p style="font-size:12px;color:var(--text-mid);margin:8px 0 12px">Sua mensagem será enviada de forma completamente anônima.</p>
-            <button class="btn btn-primary" onclick="showToast('Em breve! API sendo implementada', 'success')">Enviar ao Mar</button>
+            <p style="font-size:12px;color:var(--text-mid);margin:8px 0 12px">Sua mensagem será enviada de forma completamente anônima e pode aparecer para outra pessoa que também precisa de apoio.</p>
+            <button class="btn btn-primary" id="btn-estrelas" onclick="sendEstrelas()"><span class="material-icons md-18">send</span> Enviar ao Mar</button>
           </div>
           <div class="card">
-            <div class="card-title">Mensagens Recebidas</div>
-            <div class="estrelas-msg"><p>Hoje percebi que está tudo bem não estar bem o tempo todo. Às vezes a gente só precisa respirar fundo e seguir.</p><small>Recebida hoje</small></div>
-            <div class="estrelas-msg"><p>Você é mais forte do que imagina. Continue!</p><small>Recebida ontem</small></div>
-            <p style="font-size:12px;color:var(--text-mid);text-align:center;margin-top:8px">API em desenvolvimento — em breve funcionalidade completa!</p>
+            <div class="card-title"><span class="material-icons md-18">mail</span> Mensagens Recebidas</div>
+            <div id="estrelas-messages"><div class="loading">Carregando mensagens...</div></div>
           </div>
         </div>
 
-        <!-- RESPIRACAO -->
+        <!-- RESPIRAÇÃO -->
         <div class="section" id="section-respiracao">
-          <div class="page-title">Respiração Guiada</div>
+          <div class="page-title"><span class="material-icons md-18">air</span> Respiração Guiada</div>
           <p class="page-subtitle">Técnica 4-7-8 para reduzir ansiedade</p>
           <div class="card" style="text-align:center">
             <div class="breath-phases">
@@ -409,38 +446,38 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
             <div style="font-size:32px;font-weight:800;color:var(--teal-deep);margin:8px 0" id="breath-count">4</div>
             <button class="btn btn-primary" style="max-width:200px;margin:0 auto" id="btn-breath" onclick="toggleBreath()">Começar</button>
             <div style="margin-top:20px;text-align:left">
-              <div class="info-card"><div class="info-card-title">Por que respirar?</div><p class="info-card-text">A respiração rítmica ajuda a baixar os níveis de cortisol e avisa ao seu cérebro que você está seguro.</p></div>
-              <div class="info-card"><div class="info-card-title">Dica do BMO</div><p class="info-card-text">Tente inalar pelo nariz e exalar suavemente pela boca, como se estivesse soprando uma vela.</p></div>
+              <div class="info-card"><div class="info-card-title"><span class="material-icons md-18">lightbulb</span> Por que respirar?</div><p class="info-card-text">A respiração rítmica ajuda a baixar os níveis de cortisol e avisa ao seu cérebro que você está seguro.</p></div>
+              <div class="info-card"><div class="info-card-title"><span class="material-icons md-18">tips_and_updates</span> Dica do BMO</div><p class="info-card-text">Tente inalar pelo nariz e exalar suavemente pela boca, como se estivesse soprando uma vela.</p></div>
             </div>
           </div>
         </div>
 
-        <!-- RELATORIOS -->
+        <!-- RELATÓRIOS -->
         <div class="section" id="section-relatorios">
-          <div class="page-title">Relatórios</div>
+          <div class="page-title"><span class="material-icons md-18">insights</span> Relatórios</div>
           <p class="page-subtitle">Acompanhe sua evolução de bem-estar</p>
           <div class="grid-2" style="margin-bottom:16px">
             <div class="card">
-              <div class="card-title">Tendência de Humor</div>
+              <div class="card-title"><span class="material-icons md-18">trending_up</span> Tendência de Humor</div>
               <div id="report-mood-trend" style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;min-height:80px"><div class="loading">Carregando...</div></div>
             </div>
             <div class="card">
-              <div class="card-title">Produtividade</div>
+              <div class="card-title"><span class="material-icons md-18">bar_chart</span> Produtividade</div>
               <div id="report-tasks-stats"><div class="loading">Carregando...</div></div>
             </div>
           </div>
           <div class="card">
-            <div class="card-title">Evolução do Humor</div>
+            <div class="card-title"><span class="material-icons md-18">show_chart</span> Evolução do Humor</div>
             <p style="font-size:13px;color:var(--text-mid);text-align:center;padding:20px">Registre seu humor diariamente para ver sua evolução completa aqui!</p>
           </div>
         </div>
 
         <!-- PERFIL -->
         <div class="section" id="section-perfil">
-          <div class="page-title">Perfil</div>
+          <div class="page-title"><span class="material-icons md-18">person</span> Perfil</div>
           <div class="grid-2">
             <div class="card">
-              <div class="profile-avatar"><span class="material-icons md-48">person</span></div>
+              <div class="profile-avatar"><span class="material-icons md-36">person</span></div>
               <div class="profile-name" id="profile-name">Carregando...</div>
               <div class="profile-email" id="profile-email">...</div>
               <div class="form-group">
@@ -451,18 +488,18 @@ body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--te
                 <label>Bio</label>
                 <input type="text" id="profile-input-bio" placeholder="Fale um pouco sobre você">
               </div>
-              <button class="btn btn-primary" onclick="showToast('Em breve!', 'success')">Salvar alterações</button>
+              <button class="btn btn-primary" id="btn-save-profile" onclick="saveProfile()">Salvar alterações</button>
             </div>
             <div>
               <div class="card" style="margin-bottom:16px">
-                <div class="card-title">Resumo</div>
+                <div class="card-title"><span class="material-icons md-18">assessment</span> Resumo</div>
                 <div style="display:flex;flex-direction:column;gap:10px">
                   <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--bg);border-radius:8px"><span style="font-size:14px">Tarefas totais</span><span class="badge badge-green" id="profile-tasks-total">-</span></div>
                   <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--bg);border-radius:8px"><span style="font-size:14px">Registros de humor</span><span class="badge badge-green" id="profile-mood-total">-</span></div>
                 </div>
               </div>
               <div class="card">
-                <div class="card-title">Conta</div>
+                <div class="card-title"><span class="material-icons md-18">settings</span> Conta</div>
                 <button class="btn" style="background:var(--error-bg);color:var(--error-text);border:1px solid var(--error-border)" onclick="doLogout()">Sair da conta</button>
               </div>
             </div>
@@ -481,9 +518,13 @@ let userName = localStorage.getItem('bmo_username') || '';
 let chatHistory = [];
 let breathInterval = null;
 let breathRunning = false;
+let currentRoomId = null;
+let roomPollingInterval = null;
+let lastMessageCount = 0;
 
 window.onload = () => { if (token) startDashboard(); };
 
+// ── NAVEGAÇÃO ──
 function goTo(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -502,6 +543,9 @@ function showSection(name) {
   if (name === 'mood') loadMood();
   if (name === 'relatorios') loadReports();
   if (name === 'perfil') loadProfile();
+  if (name === 'chat') { stopRoomPolling(); loadRooms(); }
+  if (name === 'estrelas') loadEstrelas();
+  if (name !== 'chat') stopRoomPolling();
 }
 
 function toggleSidebar() {
@@ -512,18 +556,17 @@ function closeSidebar() {
   document.getElementById('sidebar').classList.remove('mobile-open');
   document.getElementById('overlay').classList.remove('show');
 }
-
 function showToast(msg, type) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast show ' + (type || '');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-
 function authHeaders() {
   return { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
 }
 
+// ── AUTH ──
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-password').value;
@@ -580,6 +623,7 @@ function doLogout() {
   localStorage.removeItem('bmo_token');
   localStorage.removeItem('bmo_username');
   chatHistory = [];
+  stopRoomPolling();
   goTo('page-login');
 }
 
@@ -602,6 +646,7 @@ async function loadHomeData() {
   } catch(e) {}
 }
 
+// ── MOOD HOME ──
 async function sendMood(val) {
   document.querySelectorAll('#section-home .mood-btn').forEach((b,i) => b.classList.toggle('selected', i === val-1));
   try {
@@ -610,14 +655,15 @@ async function sendMood(val) {
   } catch(e) { showToast('Erro ao registrar humor', 'error'); }
 }
 
+// ── CHATBOT IA ──
 async function sendChat() {
   const input = document.getElementById('chat-input');
   const msg = input.value.trim();
   if (!msg) return;
   input.value = '';
-  appendMsg('user', msg);
+  appendChatMsg('user', msg, 'Você');
   chatHistory.push({ role: 'user', content: msg });
-  const typingDiv = appendTyping();
+  const typingDiv = appendTypingMsg();
   try {
     const res = await fetch(API + '/chatbot/message', {
       method: 'POST', headers: authHeaders(),
@@ -626,24 +672,24 @@ async function sendChat() {
     const data = await res.json();
     typingDiv.remove();
     if (data.data && data.data.reply) {
-      appendMsg('bmo', data.data.reply);
+      appendChatMsg('bmo', data.data.reply, 'BMO');
       chatHistory.push({ role: 'assistant', content: data.data.reply });
     } else {
-      appendMsg('bmo', 'Desculpe, tive um problema. Tente novamente.');
+      appendChatMsg('bmo', 'Desculpe, tive um problema. Tente novamente.', 'BMO');
     }
-  } catch(e) { typingDiv.remove(); appendMsg('bmo', 'Sem conexão. Verifique sua internet.'); }
+  } catch(e) { typingDiv.remove(); appendChatMsg('bmo', 'Sem conexão. Verifique sua internet.', 'BMO'); }
 }
 
-function appendMsg(type, text) {
+function appendChatMsg(type, text, sender) {
   const c = document.getElementById('chat-messages');
   const d = document.createElement('div');
-  d.innerHTML = '<div class="msg-sender">' + (type === 'bmo' ? 'BMO' : 'Você') + '</div><div class="msg ' + type + '">' + text + '</div>';
+  d.innerHTML = '<div class="msg-sender">' + sender + '</div><div class="msg ' + type + '">' + text + '</div>';
   c.appendChild(d);
   c.scrollTop = c.scrollHeight;
   return d;
 }
 
-function appendTyping() {
+function appendTypingMsg() {
   const c = document.getElementById('chat-messages');
   const d = document.createElement('div');
   d.className = 'msg typing';
@@ -653,6 +699,111 @@ function appendTyping() {
   return d;
 }
 
+// ── CHAT GERAL ──
+async function loadRooms() {
+  const list = document.getElementById('chat-rooms-list');
+  list.innerHTML = '<div class="loading">Carregando...</div>';
+  try {
+    const res = await fetch(API + '/chat/rooms', { headers: authHeaders() });
+    const data = await res.json();
+    const rooms = data.data || [];
+    if (!rooms.length) {
+      list.innerHTML = '<div class="loading">Nenhuma sala ainda. Crie a primeira!</div>';
+      return;
+    }
+    list.innerHTML = rooms.map(r =>
+      '<div class="room-item ' + (currentRoomId === r.id ? 'active' : '') + '" onclick="enterRoom(\'' + r.id + '\', \'' + (r.name || 'Sala') + '\')">' +
+      '<span class="room-name">' + (r.name || 'Sala sem nome') + '</span>' +
+      '<span class="room-count">' + (r._count?.members || 0) + ' membros</span>' +
+      '</div>'
+    ).join('');
+  } catch(e) { list.innerHTML = '<div class="loading">Erro ao carregar salas</div>'; }
+}
+
+function toggleCreateRoom() {
+  const form = document.getElementById('create-room-form');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+async function createRoom() {
+  const name = document.getElementById('room-name-input').value.trim();
+  if (!name) return;
+  try {
+    const res = await fetch(API + '/chat/rooms', {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ name, type: 'GROUP' })
+    });
+    if (res.ok) {
+      document.getElementById('room-name-input').value = '';
+      document.getElementById('create-room-form').style.display = 'none';
+      showToast('Sala criada!', 'success');
+      loadRooms();
+    }
+  } catch(e) { showToast('Erro ao criar sala', 'error'); }
+}
+
+async function enterRoom(roomId, roomName) {
+  if (currentRoomId === roomId) return;
+  stopRoomPolling();
+  currentRoomId = roomId;
+  document.getElementById('chat-room-title').textContent = roomName;
+  document.getElementById('chat-room-input-row').style.display = 'flex';
+  document.getElementById('chat-room-messages').innerHTML = '<div class="loading">Carregando mensagens...</div>';
+  try {
+    await fetch(API + '/chat/rooms/' + roomId + '/join', { method: 'POST', headers: authHeaders() });
+  } catch(e) {}
+  await loadRoomMessages();
+  loadRooms();
+  startRoomPolling();
+}
+
+async function loadRoomMessages() {
+  if (!currentRoomId) return;
+  try {
+    const res = await fetch(API + '/chat/rooms/' + currentRoomId + '/messages?limit=50', { headers: authHeaders() });
+    const data = await res.json();
+    const msgs = (data.data || []).reverse();
+    if (msgs.length === lastMessageCount) return;
+    lastMessageCount = msgs.length;
+    const c = document.getElementById('chat-room-messages');
+    if (!msgs.length) { c.innerHTML = '<div class="loading">Nenhuma mensagem ainda. Seja o primeiro a falar!</div>'; return; }
+    c.innerHTML = msgs.map(m => {
+      const isMe = m.user?.name === userName || m.userId === localStorage.getItem('bmo_uid');
+      return '<div>' +
+        '<div class="msg-sender">' + (m.user?.name || 'Usuário') + '</div>' +
+        '<div class="msg ' + (isMe ? 'user' : 'other') + '">' + (m.isDeleted ? '<i>Mensagem removida</i>' : m.content) + '</div>' +
+        '</div>';
+    }).join('');
+    c.scrollTop = c.scrollHeight;
+  } catch(e) {}
+}
+
+async function sendRoomMessage() {
+  if (!currentRoomId) return;
+  const input = document.getElementById('chat-room-input');
+  const content = input.value.trim();
+  if (!content) return;
+  input.value = '';
+  try {
+    const res = await fetch(API + '/chat/rooms/' + currentRoomId + '/messages', {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ content })
+    });
+    if (res.ok) { lastMessageCount = 0; await loadRoomMessages(); }
+    else { showToast('Mensagem bloqueada pela moderação', 'error'); }
+  } catch(e) { showToast('Erro ao enviar mensagem', 'error'); }
+}
+
+function startRoomPolling() {
+  roomPollingInterval = setInterval(loadRoomMessages, 3000);
+}
+function stopRoomPolling() {
+  if (roomPollingInterval) { clearInterval(roomPollingInterval); roomPollingInterval = null; }
+  currentRoomId = null;
+  lastMessageCount = 0;
+}
+
+// ── TASKS ──
 async function loadTasks(filter) {
   const list = document.getElementById('tasks-list');
   list.innerHTML = '<div class="loading">Carregando...</div>';
@@ -663,13 +814,13 @@ async function loadTasks(filter) {
     const tasks = data.data || [];
     if (!tasks.length) { list.innerHTML = '<div class="loading">Nenhuma tarefa encontrada</div>'; return; }
     const CL = { PENDING: 'status-pending', IN_PROGRESS: 'status-progress', DONE: 'status-done' };
-    const LB = { PENDING: 'Pendente', IN_PROGRESS: 'Em Progresso', DONE: 'Concluída' };
+    const LB = { PENDING: '<span class="material-icons md-18">hourglass_top</span> Pendente', IN_PROGRESS: '<span class="material-icons md-18">autorenew</span> Em Progresso', DONE: '<span class="material-icons md-18">task_alt</span> Concluída' };
     list.innerHTML = tasks.map(t =>
       '<div class="task-item">' +
       '<div class="task-check ' + (t.status === 'DONE' ? 'done' : '') + '" onclick="toggleTask(\'' + t.id + '\',\'' + t.status + '\')">' + (t.status === 'DONE' ? '✓' : '') + '</div>' +
       '<span class="task-text ' + (t.status === 'DONE' ? 'done' : '') + '">' + t.title + '</span>' +
       '<span class="task-status ' + CL[t.status] + '">' + LB[t.status] + '</span>' +
-      '<button class="task-delete" onclick="deleteTask(\'' + t.id + '\')"><span class="material-icons md-18">close</span></button>' +
+      '<button class="task-delete" onclick="deleteTask(\'' + t.id + '\')"><span class="material-icons md-18">delete</span></button>' +
       '</div>'
     ).join('');
   } catch(e) { list.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
@@ -707,6 +858,7 @@ function filterTasks(filter, btn) {
   loadTasks(filter);
 }
 
+// ── MOOD FULL ──
 async function sendMoodFull(val) {
   document.querySelectorAll('#section-mood .mood-btn').forEach((b,i) => b.classList.toggle('selected', i === val-1));
   const note = document.getElementById('mood-note').value;
@@ -726,7 +878,7 @@ async function loadMood() {
     ]);
     const hist = await h.json();
     const stats = await s.json();
-    const EM = { 1:'😢', 2:'😕', 3:'😊', 4:'🙂', 5:'😄' };
+    const EM = { 1:'😢', 2:'😕', 3:'😊', 4:'😄', 5:'🤩' };
     if (hist.data && hist.data.length) {
       document.getElementById('mood-history').innerHTML = '<div class="mood-history">' +
         hist.data.map(e => '<div class="mood-hist-item"><div class="emoji">' + EM[e.mood] + '</div><small>' + new Date(e.createdAt).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + '</small></div>').join('') +
@@ -745,6 +897,54 @@ async function loadMood() {
   } catch(e) {}
 }
 
+// ── ESTRELAS PONTILHADAS ──
+async function sendEstrelas() {
+  const input = document.getElementById('estrelas-input');
+  const content = input.value.trim();
+  if (!content) { showToast('Escreva uma mensagem antes de enviar', 'error'); return; }
+  if (content.length < 10) { showToast('Mensagem muito curta. Escreva um pouco mais', 'error'); return; }
+  const btn = document.getElementById('btn-estrelas');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  try {
+    const res = await fetch(API + '/estrelas', {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ content })
+    });
+    if (res.ok) {
+      input.value = '';
+      showToast('Mensagem enviada ao mar', 'success');
+      loadEstrelas();
+    } else {
+      const data = await res.json();
+      showToast(data.message || 'Erro ao enviar', 'error');
+    }
+  } catch(e) { showToast('Erro de conexão', 'error'); }
+  btn.disabled = false; btn.innerHTML = '<span class="material-icons md-18">send</span> Enviar ao Mar';
+}
+
+async function loadEstrelas() {
+  const container = document.getElementById('estrelas-messages');
+  container.innerHTML = '<div class="loading">Buscando mensagens do mar...</div>';
+  try {
+    const res = await fetch(API + '/estrelas', { headers: authHeaders() });
+    const data = await res.json();
+    const msgs = data.data || [];
+    if (!msgs.length) {
+      container.innerHTML = '<div class="loading">Nenhuma mensagem ainda. Seja o primeiro a enviar!</div>';
+      return;
+    }
+    container.innerHTML = msgs.map(m =>
+      '<div class="estrelas-msg">' +
+      '<p>' + m.content + '</p>' +
+      '<small>Recebida em ' + new Date(m.createdAt).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'}) + '</small>' +
+      '</div>'
+    ).join('');
+  } catch(e) {
+    container.innerHTML = '<div class="loading">Erro ao carregar mensagens</div>';
+  }
+}
+
+// ── RELATÓRIOS ──
 async function loadReports() {
   try {
     const [sr, mr] = await Promise.all([
@@ -757,12 +957,12 @@ async function loadReports() {
       const d = stats.data;
       document.getElementById('report-tasks-stats').innerHTML =
         '<div style="display:flex;flex-direction:column;gap:8px">' +
-        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span>Pendentes</span><b>' + (d.pending??0) + '</b></div>' +
-        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span>Em progresso</span><b>' + (d.inProgress??0) + '</b></div>' +
-        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span>Concluídas</span><b>' + (d.done??0) + '</b></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span><span class="material-icons md-18">hourglass_top</span> Pendentes</span><b>' + (d.pending??0) + '</b></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span><span class="material-icons md-18">autorenew</span> Em progresso</span><b>' + (d.inProgress??0) + '</b></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:8px;background:var(--bg);border-radius:8px"><span><span class="material-icons md-18">task_alt</span> Concluídas</span><b>' + (d.done??0) + '</b></div>' +
         '</div>';
     }
-    const EM = { 1:'😢', 2:'😕', 3:'😊', 4:'🙂', 5:'😄' };
+    const EM = { 1:'😢', 2:'😕', 3:'😊', 4:'😄', 5:'🤩' };
     if (mood.data && mood.data.trend && mood.data.trend.length) {
       document.getElementById('report-mood-trend').innerHTML = mood.data.trend.map(t =>
         '<div style="text-align:center"><div style="font-size:24px">' + EM[t.mood] + '</div><div style="font-size:10px;color:var(--text-mid)">' + new Date(t.date).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + '</div></div>'
@@ -773,6 +973,7 @@ async function loadReports() {
   } catch(e) {}
 }
 
+// ── PERFIL ──
 async function loadProfile() {
   try {
     const [pr, tr, mr] = await Promise.all([
@@ -794,6 +995,35 @@ async function loadProfile() {
   } catch(e) {}
 }
 
+async function saveProfile() {
+  const name = document.getElementById('profile-input-name').value.trim();
+  const bio = document.getElementById('profile-input-bio').value.trim();
+  if (!name) { showToast('Nome não pode ser vazio', 'error'); return; }
+  const btn = document.getElementById('btn-save-profile');
+  btn.textContent = 'Salvando...';
+  btn.disabled = true;
+  try {
+    const res = await fetch(API + '/users/me', {
+      method: 'PATCH', headers: authHeaders(),
+      body: JSON.stringify({ name, bio: bio || undefined })
+    });
+    const data = await res.json();
+    if (res.ok && data.data) {
+      userName = data.data.name;
+      localStorage.setItem('bmo_username', userName);
+      document.getElementById('topbar-username').textContent = userName;
+      document.getElementById('home-username').textContent = userName;
+      document.getElementById('profile-name').textContent = userName;
+      showToast('Perfil atualizado!', 'success');
+    } else {
+      showToast('Erro ao salvar perfil', 'error');
+    }
+  } catch(e) { showToast('Erro de conexão', 'error'); }
+  btn.textContent = 'Salvar alterações';
+  btn.disabled = false;
+}
+
+// ── RESPIRAÇÃO ──
 const breathPhases = [
   { label:'Inalar', dur:4, id:'phase-inhale', size:'220px' },
   { label:'Segurar', dur:7, id:'phase-hold', size:'220px' },
